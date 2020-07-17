@@ -12,6 +12,10 @@ from SamplePreprocessor import preprocessor, wer
 from Model import DecoderType, Model
 from SpellChecker import correct_sentence
 
+from ModelVietnamese import ModelVietnamse
+from helper import preprocess
+from dataloader import MiniBatch
+from segment import prepareImg, wordSegmentation
 
 def train(model, loader):
     """ Train the neural network """
@@ -187,6 +191,38 @@ def infer_by_web(path, option):
     recognized = infer(model, path)
 
     return recognized
+
+def infer_by_web_vietnamese(path, option):
+    with open('../data_vietnamese/charList.txt', 'r', encoding='utf-8') as f:
+        charList = f.read()
+    charList = list(charList)
+    model = ModelVietnamse(charList, restore=True)
+    img = prepareImg(cv2.imread('../data_vietnamese/sample/sample_3.png'), 500)
+    result = wordSegmentation(img, kernelSize=25, sigma=11, theta=4, minArea=0)
+    recognized = str()
+    draw = []
+    i=""
+    for line in result:
+        if len(line):
+            for (_, w) in enumerate(line):
+                (wordBox, wordImg) = w
+                # i+="1"
+                # cv2.imshow(i,wordImg)
+                recognized += predict_vietnamese(model, wordImg) + ' '
+                draw.append(wordBox)
+            #recognized += '\n'
+    print('\n---------------------\nRecognized:\n' + recognized)
+    for wordBox in draw:
+        (x, y, w, h) = wordBox
+        cv2.rectangle(img, (x, y), (x+w, y+h), 0, 1)
+    return recognized
+
+def predict_vietnamese(model, word):
+    ''' predict and return text recognized '''
+    img = preprocess(word, ModelVietnamse.imgSize)
+    minibatch = MiniBatch(None, [img])
+    recognized = model.inferBatch(minibatch)
+    return recognized[0]
 
 
 if __name__ == '__main__':
