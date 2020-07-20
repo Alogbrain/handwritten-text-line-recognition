@@ -6,8 +6,16 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/bootstrap.css') }}">
     <script src="{{url_for('static', filename='js/jquery.js')}}"></script>
     <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-
+  
 </head>
+<style>
+  #img_result{
+    width: 100%;
+    height: 100%;
+    max-width: 1200px;
+    max-height: 500px;
+  }
+</style>
 <body>
     <div class="container">
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -19,7 +27,7 @@
         <!--Static Folder is predefined in Jinja-->
         <!--<img src="{{url_for('static', filename=image_name)}} ">-->
         <figure class="figure">
-          <img src="{{url_for('static', filename=image_name)}} " class="figure-img img-fluid rounded" alt="Upload Image.">
+          <img id="img_result" src="{{url_for('static', filename=image_name)}} " class="figure-img img-fluid rounded" alt="Upload Image.">
           <figcaption class="figure-caption">Upload Recently Photo.</figcaption>
         </figure>
         <p class="bg-success">

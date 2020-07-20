@@ -9,20 +9,16 @@
 <body>
 
 <div class="container" id="outer">
-        {% include "logo_include.html" %}
-    <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
+    <nav>
+        <img alt="Brand" src="{{url_for('static',filename='img/brand2.png') }}">
+        <ul class="nav nav-pills pull-right" style="margin-top: 20px;">
             <li role="presentation" class="active"><a href="#">Home</a></li>
             <li role="presentation"><a href="#">About</a></li>
             <li role="presentation"><a href="#">Contact</a></li>
-          </ul>
-
-        </nav>
-        <h3 class="text-muted">Handwritten Line Text Recognition</h3>
-
-    </div>
-    <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+        </ul>
+        <h3 class="text-muted">FETEL-HCMUS</h3>
+    </nav>
+    <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" style="margin-top: 50px;">
             <div class="form-group">
                 <label for="file-picker">File Input</label><br>
                 <input id="file-picker" type="file" name="file" accept="image/*" multiple>

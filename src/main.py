@@ -197,7 +197,7 @@ def infer_by_web_vietnamese(path, option):
         charList = f.read()
     charList = list(charList)
     model = ModelVietnamse(charList, restore=True)
-    img = prepareImg(cv2.imread('../data_vietnamese/sample/sample_3.png'), 500)
+    img = prepareImg(cv2.imread(path), 500)
     result = wordSegmentation(img, kernelSize=25, sigma=11, theta=4, minArea=0)
     recognized = str()
     draw = []
