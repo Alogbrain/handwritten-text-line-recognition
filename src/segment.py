@@ -173,6 +173,42 @@ def wordSegmentation(img, kernelSize, sigma, theta, minArea=0):
         result.append(sorted(temp, key=lambda entry: entry[0][0]))
     return result
 
+def wordSegmentationV2(img, kernelSize, sigma, theta, minArea=0):
+    ''' word segmentation '''
+    sigma_X = sigma
+    sigma_Y = sigma * theta
+    # use gaussian blur and applies threshold
+    imgFiltered = cv2.GaussianBlur(img, (kernelSize, kernelSize), sigmaX=sigma_X, sigmaY=sigma_Y)
+    _, imgThres = cv2.threshold(imgFiltered, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    imgThres = 255 - imgThres
+    # find connected components
+    #components, _ = cv2.findContours(imgThres, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    _,components, _ = cv2.findContours(imgThres, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    lines = lineSegmentation(img, sigma)
+
+    items = []
+    for c in components:
+        # skip small word candidates
+        if cv2.contourArea(c) < minArea:
+            continue
+        # append bounding box and image of word to items list
+        currBox = cv2.boundingRect(c)
+        (x, y, w, h) = currBox
+        currImg = img[y:y+h, x:x+w]
+        items.append([currBox, currImg])
+    
+    result = []
+    for line in lines:
+        temp = []
+        for currBox, currImg in items:
+            if currBox[1] < line:
+                temp.append([currBox, currImg])
+        for element in temp:
+            items.remove(element)
+        # list of words, sorted by x-coordinate
+        result.append(sorted(temp, key=lambda entry: entry[0][0]))
+    return result
+
 def getXFromRect(item):
     return item[0]
 
