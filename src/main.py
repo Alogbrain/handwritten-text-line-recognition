@@ -14,7 +14,7 @@ from SpellChecker import correct_sentence
 
 from ModelVietnamese import ModelVietnamse
 from helper import preprocess
-from dataloader import MiniBatch
+from dataloaderVietnamese import MiniBatch
 from segment import prepareImg, wordSegmentation, wordSegmentationV2
 
 def train(model, loader):
